@@ -12,11 +12,7 @@ export default function TabOneScreen() {
   const handleCollapsePress = () => bottomSheetRef.current?.collapse();
   const handleSnapToPosition = () =>
     bottomSheetRef.current?.snapToPosition("100%");
-
-  const renderBackdrop = useCallback((props:any) => {
-    return <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />;
-  }, []);
-
+ 
   const snapToIndex = (index: number) => {
     bottomSheetRef.current?.snapToIndex(index);
   };

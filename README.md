@@ -1,3 +1,5 @@
+https://www.youtube.com/watch?v=oIEykI5oagI&t=89s
+
 npx create-expo-app bottomSheetApp --template tabs
 cd bottomSheetApp
 
