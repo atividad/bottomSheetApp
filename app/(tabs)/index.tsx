@@ -10,6 +10,9 @@ export default function TabOneScreen() {
   const handleClosePress = () => bottomSheetRef.current?.close();
   const handleOpenPress = () => bottomSheetRef.current?.expand();
   const handleCollapsePress = () => bottomSheetRef.current?.collapse();
+  const handleSnapToPosition = () =>
+    bottomSheetRef.current?.snapToPosition("100%");
+
   const snapToIndex = (index: number) => {
     bottomSheetRef.current?.snapToIndex(index);
   };
@@ -30,13 +33,16 @@ export default function TabOneScreen() {
         <Button title="Snap to 1" onPress={() => snapToIndex(1)} />
         <Button title="Snap to 2" onPress={() => snapToIndex(2)} />
         <Button title="Snap to 3" onPress={() => snapToIndex(3)} />
+        <Button title="Snap to Position Top" onPress={handleSnapToPosition} />
         <BottomSheet
           snapPoints={snapPoints}
           ref={bottomSheetRef}
           onChange={handleSheetChanges}
+          backgroundStyle={{ backgroundColor: "black" }}
+          handleIndicatorStyle={{ backgroundColor: "yellow" }}
         >
           <BottomSheetView style={styles.contentContainer}>
-            <Text>Awesome 🎉</Text>
+            <Text style={styles.containerHeadline}>Awesome 🎉</Text>
           </BottomSheetView>
         </BottomSheet>
       </GestureHandlerRootView>
@@ -51,7 +57,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: 36,
+    // padding: 36,
     alignItems: "center",
+  },
+  containerHeadline: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "white",
   },
 });

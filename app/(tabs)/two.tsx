@@ -1,31 +1,83 @@
-import { StyleSheet } from 'react-native';
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import React, { useCallback, useMemo, useRef } from "react";
+import {
+  Button,
+  ListRenderItemInfo,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+const TabTwoScreen: React.FC = () => {
+  // refs
+  const sheetRef = useRef<BottomSheet>(null);
 
-export default function TabTwoScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
+  // data
+  const data = useMemo<string[]>(
+    () => Array.from({ length: 50 }, (_, index) => `index-${index}`),
+    []
   );
-}
+  const snapPoints = useMemo<string[]>(() => ["25%", "50%", "90%"], []);
+
+  // callbacks
+  const handleSheetChange = useCallback((index: number) => {
+    console.log("handleSheetChange", index);
+  }, []);
+
+  const handleSnapPress = useCallback((index: number) => {
+    sheetRef.current?.snapToIndex(index);
+  }, []);
+
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<string>) => (
+      <View style={styles.itemContainer}>
+        <Text>{item}</Text>
+      </View>
+    ),
+    []
+  );
+
+  return (
+    <GestureHandlerRootView style={styles.container}>
+      <Button title="Snap To 90%" onPress={() => handleSnapPress(2)} />
+      <Button title="Snap To 50%" onPress={() => handleSnapPress(1)} />
+      <Button title="Snap To 25%" onPress={() => handleSnapPress(0)} />
+      <Button title="Close" onPress={handleClosePress} />
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enableDynamicSizing={false}
+        onChange={handleSheetChange}
+      >
+        <BottomSheetFlatList
+          data={data}
+          keyExtractor={(item: string) => item}
+          renderItem={renderItem}
+          contentContainerStyle={styles.contentContainer}
+        />
+      </BottomSheet>
+    </GestureHandlerRootView>
+  );
+};
+
+export default TabTwoScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 200,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  contentContainer: {
+    backgroundColor: "white",
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  itemContainer: {
+    padding: 6,
+    margin: 6,
+    backgroundColor: "#eee",
   },
 });
