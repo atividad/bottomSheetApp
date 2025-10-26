@@ -1,6 +1,6 @@
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput, BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function TabOneScreen() {
@@ -13,6 +13,10 @@ export default function TabOneScreen() {
   const handleSnapToPosition = () =>
     bottomSheetRef.current?.snapToPosition("100%");
 
+  const renderBackdrop = useCallback((props:any) => {
+    return <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />;
+  }, []);
+
   const snapToIndex = (index: number) => {
     bottomSheetRef.current?.snapToIndex(index);
   };
@@ -23,8 +27,7 @@ export default function TabOneScreen() {
   }, []);
 
   // renders
-  return (
-    <View style={styles.container}>
+  return ( 
       <GestureHandlerRootView style={styles.container}>
         <Button title="Open Bottom Sheet" onPress={handleOpenPress} />
         <Button title="Close Bottom Sheet" onPress={handleClosePress} />
@@ -37,16 +40,19 @@ export default function TabOneScreen() {
         <BottomSheet
           snapPoints={snapPoints}
           ref={bottomSheetRef}
+          backdropComponent={BottomSheetBackdrop}
           onChange={handleSheetChanges}
           backgroundStyle={{ backgroundColor: "black" }}
           handleIndicatorStyle={{ backgroundColor: "yellow" }}
         >
           <BottomSheetView style={styles.contentContainer}>
             <Text style={styles.containerHeadline}>Awesome 🎉</Text>
+            {/* <TextInput style={styles.input}  /> */}
+            <BottomSheetTextInput style={styles.input}/>
           </BottomSheetView>
         </BottomSheet>
       </GestureHandlerRootView>
-    </View>
+ 
   );
 }
 
@@ -65,4 +71,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
   },
+  input:{
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop:20,
+    width:'90%',
+    paddingHorizontal:10,
+    color:'white'
+  }
 });
